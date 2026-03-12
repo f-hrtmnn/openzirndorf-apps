@@ -24,7 +24,15 @@ type SiteFooterProps = {
 };
 
 function DefaultBrand() {
-  return <BrandLogo alt="Open Zirndorf" size="footerMark" />;
+  return (
+    <>
+      <BrandLogo alt="Open Zirndorf" size="footerMark" />
+      <span className="font-heading text-[1.85rem] font-extrabold leading-none tracking-[-0.04em] text-white sm:text-[2rem]">
+        <span className="text-primary">open</span>
+        <span className="text-white">zirndorf</span>
+      </span>
+    </>
+  );
 }
 
 export function SiteFooter({

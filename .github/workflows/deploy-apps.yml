@@ -99,7 +99,7 @@ jobs:
           cp -R "apps/${{ matrix.app.directory }}/dist/." "pages/${{ matrix.app.directory }}/"
 
       - name: Upload app artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: pages-${{ matrix.app.directory }}
           path: pages
@@ -115,7 +115,7 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Download app artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: pages-*
           path: combined
