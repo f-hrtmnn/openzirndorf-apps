@@ -12,7 +12,10 @@ const columns = [
   {
     title: "Community",
     links: [
-      { label: "Slack", href: "#" },
+      {
+        label: "Slack",
+        href: "https://join.slack.com/t/openzirndorf/shared_invite/zt-3qt1trev5-UZDu3QpOfFfLKcIQTndZ6Q",
+      },
       { label: "GitHub", href: "#" },
       { label: "Instagram", href: "#" },
     ],

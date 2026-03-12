@@ -2,7 +2,8 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-const storybookBasePath = process.env.STORYBOOK_BASE_PATH;
+const storybookBasePath =
+  process.env.BASE_PATH ?? process.env.STORYBOOK_BASE_PATH;
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],

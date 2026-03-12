@@ -6,6 +6,8 @@ import type { ReactNode } from "react";
 type FooterLink = {
   label: string;
   href: string;
+  rel?: string;
+  target?: string;
 };
 
 type FooterColumn = {
@@ -22,17 +24,7 @@ type SiteFooterProps = {
 };
 
 function DefaultBrand() {
-  return (
-    <>
-      <BrandLogo alt="Open Zirndorf" size="footerMark" />
-      <span className="text-brand-green text-[1.25rem] leading-none font-bold">
-        open
-      </span>
-      <span className="text-white text-[1.25rem] leading-none font-bold">
-        zirndorf
-      </span>
-    </>
-  );
+  return <BrandLogo alt="Open Zirndorf" size="footerMark" />;
 }
 
 export function SiteFooter({
@@ -62,6 +54,8 @@ export function SiteFooter({
                 <a
                   key={link.href}
                   href={link.href}
+                  rel={link.rel}
+                  target={link.target}
                   className="text-[0.88rem] text-white/55 transition-colors duration-200 ease-(--transition-base) hover:text-white"
                 >
                   {link.label}

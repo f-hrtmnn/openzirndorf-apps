@@ -9,12 +9,12 @@
    * Do not change these values locally. If the brand palette changes,
    * update the source design tokens and the pen file first.
    */
-  --oz-brand-green: #009A00;
-  --oz-brand-green-hover: #007A00;
+  --oz-brand-green: #009a00;
+  --oz-brand-green-hover: #007a00;
   --oz-brand-green-dark: #006600;
-  --oz-brand-dark: #1F2937;
-  --oz-brand-red: #FF0000;
-  --oz-brand-orange: #D96020;
+  --oz-brand-dark: #1f2937;
+  --oz-brand-red: #ff0000;
+  --oz-brand-orange: #d96020;
 
   --oz-text-primary: #1f2937;
   --oz-text-secondary: #6b7280;

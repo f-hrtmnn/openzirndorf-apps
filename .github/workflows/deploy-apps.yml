@@ -1,0 +1,186 @@
+name: Deploy Apps
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.discover.outputs.apps }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Discover deployable apps
+        id: discover
+        run: |
+          node <<'EOF' >> "$GITHUB_OUTPUT"
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const appsDir = path.join(process.cwd(), 'apps');
+          const apps = fs.readdirSync(appsDir, { withFileTypes: true })
+            .filter((entry) => entry.isDirectory())
+            .map((entry) => {
+              const directory = entry.name;
+              const packageJsonPath = path.join(appsDir, directory, 'package.json');
+
+              if (!fs.existsSync(packageJsonPath)) {
+                return null;
+              }
+
+              const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+              if (!packageJson.scripts?.build) {
+                return null;
+              }
+
+              return {
+                directory,
+                packageName: packageJson.name,
+              };
+            })
+            .filter(Boolean);
+
+          if (apps.length === 0) {
+            throw new Error('No deployable apps found under apps/.');
+          }
+
+          process.stdout.write(`apps=${JSON.stringify(apps)}\n`);
+          EOF
+
+  build:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.discover.outputs.apps) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.32.1 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build app
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/${{ matrix.app.directory }}/
+        run: pnpm --filter "${{ matrix.app.packageName }}" build
+
+      - name: Prepare app artifact
+        run: |
+          mkdir -p "pages/${{ matrix.app.directory }}"
+          cp -R "apps/${{ matrix.app.directory }}/dist/." "pages/${{ matrix.app.directory }}/"
+
+      - name: Upload app artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-${{ matrix.app.directory }}
+          path: pages
+
+  bundle:
+    needs:
+      - discover
+      - build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Download app artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: pages-*
+          path: combined
+          merge-multiple: true
+
+      - name: Flatten app artifacts
+        run: |
+          cp -R combined/pages/. combined/
+          rm -rf combined/pages
+
+      - name: Generate root index
+        env:
+          APPS_JSON: ${{ needs.discover.outputs.apps }}
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
+        run: |
+          node <<'EOF'
+          const fs = require('node:fs');
+          const path = require('node:path');
+
+          const apps = JSON.parse(process.env.APPS_JSON);
+          const repositoryName = process.env.REPOSITORY_NAME;
+          const links = apps
+            .map((app) => `<li><a href="./${app.directory}/">${app.directory}</a></li>`)
+            .join('');
+
+          const html = `<!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>${repositoryName}</title>
+              <style>
+                body { font-family: system-ui, sans-serif; margin: 0; padding: 2rem; background: #f5f5f5; color: #111; }
+                main { max-width: 40rem; margin: 0 auto; background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); }
+                h1 { margin-top: 0; }
+                ul { padding-left: 1.25rem; }
+                a { color: inherit; }
+              </style>
+            </head>
+            <body>
+              <main>
+                <h1>${repositoryName}</h1>
+                <p>Published apps:</p>
+                <ul>${links}</ul>
+              </main>
+            </body>
+          </html>`;
+
+          fs.mkdirSync(path.join(process.cwd(), 'combined'), { recursive: true });
+          fs.writeFileSync(path.join(process.cwd(), 'combined', 'index.html'), html);
+          EOF
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: combined
+
+  deploy:
+    needs: bundle
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -9,6 +9,8 @@ type ParticipationCardProps = {
   title: string;
   description: string;
   href: string;
+  rel?: string;
+  target?: string;
   tone?: "violet" | "orange" | "neutral";
   className?: string;
 };
@@ -37,6 +39,8 @@ export function ParticipationCard({
   title,
   description,
   href,
+  rel,
+  target,
   tone = "neutral",
   className,
 }: ParticipationCardProps) {
@@ -46,19 +50,19 @@ export function ParticipationCard({
     <Card
       asChild
       className={cn(
-        "group relative gap-0 rounded-[var(--radius-lg)] border-[1.5px] p-7 transition-transform duration-200 ease-[var(--transition-base)] hover:-translate-y-[3px] hover:[box-shadow:var(--shadow-hover)]",
+        "group relative gap-0 rounded-(--radius-lg) border-[1.5px] p-7 transition-transform duration-200 ease-(--transition-base) hover:-translate-y-0.75 hover:[box-shadow:var(--shadow-hover)]",
         styles.card,
         className,
       )}
     >
-      <a href={href}>
-        <span className="absolute top-6 right-6 text-muted-foreground transition duration-200 ease-[var(--transition-base)] hover:text-foreground">
+      <a href={href} rel={rel} target={target}>
+        <span className="absolute top-6 right-6 text-muted-foreground transition duration-200 ease-(--transition-base) hover:text-foreground">
           <ArrowUpRight className="size-5" />
         </span>
         <div className="flex items-start gap-5">
           <div
             className={cn(
-              "flex size-[52px] shrink-0 items-center justify-center rounded-[var(--radius)] text-xl",
+              "flex size-13 shrink-0 items-center justify-center rounded-lg text-xl",
               styles.icon,
             )}
           >

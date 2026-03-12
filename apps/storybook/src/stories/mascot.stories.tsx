@@ -8,15 +8,20 @@ const meta = {
     name: "fynn",
     size: "md",
     decorative: false,
+    variant: "mark",
   },
   argTypes: {
     name: {
       control: "select",
-      options: ["fynn", "kreiselix", "nico", "quirin", "tuxi"],
+      options: ["fynn", "horst", "kreiselix", "nico", "paul", "quirin", "tuxi"],
     },
     size: {
       control: "select",
       options: ["sm", "md", "lg", "xl"],
+    },
+    variant: {
+      control: "select",
+      options: ["mark", "full"],
     },
     decorative: {
       control: "boolean",
@@ -34,19 +39,55 @@ export const Default: Story = {};
 export const Gallery: Story = {
   render: () => (
     <div className="grid gap-6 rounded-lg bg-secondary/35 p-8 sm:grid-cols-2 lg:grid-cols-3">
-      {(["fynn", "kreiselix", "nico", "quirin", "tuxi"] as const).map(
-        (name) => (
-          <div
-            key={name}
-            className="flex flex-col items-center gap-4 rounded-(--radius) bg-background p-6 text-center [box-shadow:var(--shadow-sm)]"
-          >
-            <Mascot name={name} size="md" decorative={false} />
-            <p className="text-sm font-semibold capitalize text-foreground">
-              {name}
-            </p>
-          </div>
-        ),
-      )}
+      {(
+        [
+          "fynn",
+          "horst",
+          "kreiselix",
+          "nico",
+          "paul",
+          "quirin",
+          "tuxi",
+        ] as const
+      ).map((name) => (
+        <div
+          key={name}
+          className="flex flex-col items-center gap-4 rounded-lg bg-background p-6 text-center [box-shadow:var(--shadow-sm)]"
+        >
+          <Mascot name={name} size="md" decorative={false} />
+          <p className="text-sm font-semibold capitalize text-foreground">
+            {name}
+          </p>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const FullFigures: Story = {
+  render: () => (
+    <div className="grid gap-6 rounded-lg bg-secondary/35 p-8 sm:grid-cols-2 lg:grid-cols-3">
+      {(
+        [
+          "fynn",
+          "horst",
+          "kreiselix",
+          "nico",
+          "paul",
+          "quirin",
+          "tuxi",
+        ] as const
+      ).map((name) => (
+        <div
+          key={name}
+          className="flex flex-col items-center gap-4 rounded-lg bg-background p-6 text-center [box-shadow:var(--shadow-sm)]"
+        >
+          <Mascot name={name} size="md" variant="full" decorative={false} />
+          <p className="text-sm font-semibold capitalize text-foreground">
+            {name}
+          </p>
+        </div>
+      ))}
     </div>
   ),
 };

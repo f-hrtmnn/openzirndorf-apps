@@ -3,10 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "storybook build",
+    "build": "storybook build --output-dir dist",
     "dev": "storybook dev -p 6006 --ci",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build --output-dir dist",
     "lint": "biome check .storybook src",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "echo \"No Storybook tests configured yet\""

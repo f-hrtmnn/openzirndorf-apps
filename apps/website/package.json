@@ -1,0 +1,27 @@
+{
+  "name": "@openzirndorf/website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "lint": "biome check src vite.config.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "echo \"No website tests configured yet\""
+  },
+  "dependencies": {
+    "@openzirndorf/brand": "workspace:*",
+    "@openzirndorf/ui": "workspace:*",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^6.1.1"
+  }
+}

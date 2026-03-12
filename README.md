@@ -24,7 +24,7 @@ pnpm build-storybook
 
 - `CI` validates lint, typecheck, tests, package builds, and Storybook builds on pull requests and `main`.
 - `Publish Packages` runs on `main` via Changesets, opens or updates a release PR when needed, and publishes scoped packages to GitHub Packages once versions are ready.
-- `Deploy Storybook` builds Storybook with a repository-aware base path and deploys it to GitHub Pages.
+- `Deploy Apps` discovers deployable apps under `apps/`, builds each one with `pnpm --filter <package> build`, assigns a repository-aware base path, and publishes them to GitHub Pages under per-app subpaths.
 
 ### GitHub Packages
 

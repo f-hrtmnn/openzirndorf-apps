@@ -17,6 +17,8 @@ import type { ReactNode } from "react";
 type HeaderLink = {
   label: string;
   href: string;
+  rel?: string;
+  target?: string;
 };
 
 type SiteHeaderProps = {
@@ -25,6 +27,7 @@ type SiteHeaderProps = {
   homeHref?: string;
   brand?: ReactNode;
   mobileTitle?: string;
+  mobileCtaLabel?: string;
   className?: string;
 };
 
@@ -38,6 +41,7 @@ export function SiteHeader({
   homeHref = "/",
   brand,
   mobileTitle = "Navigation",
+  mobileCtaLabel,
   className,
 }: SiteHeaderProps) {
   return (
@@ -63,6 +67,8 @@ export function SiteHeader({
             <a
               key={item.href}
               href={item.href}
+              rel={item.rel}
+              target={item.target}
               className="rounded-sm px-3 py-1.5 text-[0.9rem] font-medium text-muted-foreground transition-colors duration-200 ease-(--transition-base) hover:bg-accent hover:text-foreground"
             >
               {item.label}
@@ -72,7 +78,9 @@ export function SiteHeader({
 
         {cta ? (
           <Button asChild className="hidden md:inline-flex">
-            <a href={cta.href}>{cta.label}</a>
+            <a href={cta.href} rel={cta.rel} target={cta.target}>
+              {cta.label}
+            </a>
           </Button>
         ) : null}
 
@@ -99,7 +107,9 @@ export function SiteHeader({
                 <a
                   key={item.href}
                   href={item.href}
-                  className="rounded-(--radius) px-4 py-3.5 text-[1.1rem] font-semibold text-foreground transition-colors duration-200 ease-(--transition-base) hover:bg-accent"
+                  rel={item.rel}
+                  target={item.target}
+                  className="rounded-lg px-4 py-3.5 text-[1.1rem] font-semibold text-foreground transition-colors duration-200 ease-(--transition-base) hover:bg-accent"
                 >
                   {item.label}
                 </a>
@@ -108,7 +118,9 @@ export function SiteHeader({
             {cta ? (
               <SheetFooter>
                 <Button asChild className="w-full">
-                  <a href={cta.href}>{cta.label}</a>
+                  <a href={cta.href} rel={cta.rel} target={cta.target}>
+                    {mobileCtaLabel ?? cta.label}
+                  </a>
                 </Button>
               </SheetFooter>
             ) : null}

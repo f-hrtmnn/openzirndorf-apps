@@ -104,7 +104,7 @@ export const ParticipationCardTones: Story = {
   render: () => (
     <div className="grid gap-5 md:grid-cols-3">
       <ParticipationCard
-        href="#"
+        href="https://join.slack.com/t/openzirndorf/shared_invite/zt-3qt1trev5-UZDu3QpOfFfLKcIQTndZ6Q"
         icon={<MessageSquare className="size-6" />}
         label="Empfohlen fuer den Start"
         title="Slack beitreten"

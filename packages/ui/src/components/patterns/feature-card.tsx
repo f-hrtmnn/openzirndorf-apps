@@ -10,6 +10,8 @@ type FeatureCardProps = {
   title: string;
   description: string;
   href: string;
+  rel?: string;
+  target?: string;
   tone?: "blue" | "orange" | "neutral";
   className?: string;
 };
@@ -38,6 +40,8 @@ export function FeatureCard({
   title,
   description,
   href,
+  rel,
+  target,
   tone = "blue",
   className,
 }: FeatureCardProps) {
@@ -47,18 +51,18 @@ export function FeatureCard({
     <Card
       asChild
       className={cn(
-        "group relative gap-0 rounded-[var(--radius-lg)] border-[1.5px] p-7 transition-transform duration-200 ease-[var(--transition-base)] hover:-translate-y-1 hover:[box-shadow:var(--shadow-hover)]",
+        "group relative gap-0 rounded-(--radius-lg) border-[1.5px] p-7 transition-transform duration-200 ease-(--transition-base) hover:-translate-y-1 hover:[box-shadow:var(--shadow-hover)]",
         styles.card,
         className,
       )}
     >
-      <a href={href}>
-        <span className="absolute top-6 right-6 text-muted-foreground transition duration-200 ease-[var(--transition-base)] group-hover:text-foreground">
+      <a href={href} rel={rel} target={target}>
+        <span className="absolute top-6 right-6 text-muted-foreground transition duration-200 ease-(--transition-base) group-hover:text-foreground">
           <ArrowUpRight className="size-5" />
         </span>
         <div
           className={cn(
-            "mb-5 flex size-14 items-center justify-center rounded-[var(--radius)] text-2xl",
+            "mb-5 flex size-14 items-center justify-center rounded-lg text-2xl",
             styles.icon,
           )}
         >
