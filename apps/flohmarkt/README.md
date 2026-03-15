@@ -147,4 +147,4 @@ Die Datei [src/api.ts](src/api.ts) enthält alle Aufrufe ans Backend:
 | `createStand()` | `POST /stands` | Basic Auth | Beim Absenden des Formulars |
 
 Das Backend läuft lokal auf `http://localhost:8080` und in Produktion auf
-`https://api.openzirndorf.de` (gesteuert durch `VITE_API_URL`).
+`https://openzirndorfcouyb8pc-flohmarkt-api.functions.fnc.fr-par.scw.cloud` (gesteuert durch `VITE_API_URL`).
