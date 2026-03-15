@@ -13,4 +13,5 @@ export interface StandFormData {
   adresse: string;
   beschreibung: string;
   email: string;
+  website?: string; // Honeypot – muss leer bleiben
 }

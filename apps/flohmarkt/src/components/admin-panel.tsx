@@ -8,21 +8,18 @@ export function AdminPanel() {
   const [error, setError] = useState<string | null>(null);
   const [approvingId, setApprovingId] = useState<number | null>(null);
 
-  const load = useCallback(
-    async (t: string) => {
-      setLoading(true);
-      setError(null);
-      try {
-        setStands(await fetchAdminStands(t));
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Fehler");
-        setStands(null);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [],
-  );
+  const load = useCallback(async (t: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      setStands(await fetchAdminStands(t));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Fehler");
+      setStands(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,7 +92,9 @@ export function AdminPanel() {
           <section>
             <h2 className="text-xl font-semibold mb-3">Ausstehend</h2>
             {pending.length === 0 ? (
-              <p className="text-gray-500 text-sm">Keine ausstehenden Stände.</p>
+              <p className="text-gray-500 text-sm">
+                Keine ausstehenden Stände.
+              </p>
             ) : (
               <ul className="flex flex-col gap-3">
                 {pending.map((s) => (
@@ -134,7 +133,9 @@ export function AdminPanel() {
           <section>
             <h2 className="text-xl font-semibold mb-3">Freigegeben</h2>
             {approved.length === 0 ? (
-              <p className="text-gray-500 text-sm">Noch keine freigegebenen Stände.</p>
+              <p className="text-gray-500 text-sm">
+                Noch keine freigegebenen Stände.
+              </p>
             ) : (
               <ul className="flex flex-col gap-2">
                 {approved.map((s) => (

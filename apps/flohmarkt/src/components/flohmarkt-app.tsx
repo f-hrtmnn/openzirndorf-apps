@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { fetchStands } from "../api";
 import type { Stand } from "../types";
 import { FlohmarktMap } from "./flohmarkt-map";
+import { MeinStand } from "./mein-stand";
 import { StandForm } from "./stand-form";
 import { StandListe } from "./stand-liste";
 
@@ -31,6 +32,8 @@ export function FlohmarktApp() {
       <section aria-label="Karte der Stände">
         <FlohmarktMap />
       </section>
+
+      <MeinStand onCancelled={loadStands} />
 
       <section aria-label="Stand anmelden">
         <StandForm onSuccess={loadStands} />

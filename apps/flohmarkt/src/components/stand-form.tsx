@@ -5,9 +5,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@openzirndorf/ui";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createStand } from "../api";
 import type { StandFormData } from "../types";
+
+const EDIT_TOKEN_KEY = "flohmarkt_edit_token";
+const MIN_SUBMIT_MS = 3000; // Einreichung muss mindestens 3 Sekunden nach Laden kommen
 
 interface Props {
   onSuccess: () => void;
@@ -18,6 +21,7 @@ const EMPTY: StandFormData = {
   adresse: "",
   beschreibung: "",
   email: "",
+  website: "", // Honeypot
 };
 
 export function StandForm({ onSuccess }: Props) {
@@ -26,6 +30,8 @@ export function StandForm({ onSuccess }: Props) {
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [editToken, setEditToken] = useState<string | null>(null);
+  const mountedAt = useRef(Date.now());
 
   const handleSubmit = async () => {
     if (!form.name || !form.adresse) {
@@ -33,9 +39,20 @@ export function StandForm({ onSuccess }: Props) {
       setStatus("error");
       return;
     }
+
+    // Zeitprüfung: zu schnell = vermutlich Bot
+    if (Date.now() - mountedAt.current < MIN_SUBMIT_MS) {
+      setErrorMsg("Bitte fülle das Formular etwas langsamer aus.");
+      setStatus("error");
+      return;
+    }
+
     setStatus("loading");
     try {
-      await createStand(form);
+      const created = await createStand(form);
+      // Token im Browser speichern → ermöglicht späteren Zugriff
+      localStorage.setItem(EDIT_TOKEN_KEY, created.edit_token);
+      setEditToken(created.edit_token);
       setStatus("success");
       setForm(EMPTY);
       onSuccess();
@@ -45,12 +62,21 @@ export function StandForm({ onSuccess }: Props) {
     }
   };
 
-  if (status === "success") {
+  if (status === "success" && editToken) {
     return (
       <Card>
-        <CardContent className="pt-6">
+        <CardContent className="pt-6 flex flex-col gap-3">
           <p role="alert" className="text-green-700 font-medium">
-            Dein Stand wurde eingereicht und wird bald freigeschaltet.
+            Dein Stand wurde eingereicht und wird bald freigeschaltet. 🎉
+          </p>
+          <p className="text-sm text-gray-600">
+            Speichere diesen Link um deinen Stand später zu verwalten:
+          </p>
+          <code className="text-xs bg-gray-100 rounded px-2 py-1 break-all select-all">
+            {window.location.origin}{window.location.pathname}#mein-stand/{editToken}
+          </code>
+          <p className="text-xs text-gray-400">
+            Der Link ist auch in deinem Browser gespeichert und erscheint oben auf der Seite.
           </p>
         </CardContent>
       </Card>
@@ -127,6 +153,22 @@ export function StandForm({ onSuccess }: Props) {
                 setForm((f) => ({ ...f, email: e.target.value }))
               }
               disabled={status === "loading"}
+            />
+          </div>
+
+          {/* Honeypot – für Menschen unsichtbar, für Bots verlockend */}
+          <div aria-hidden="true" className="hidden">
+            <label htmlFor="website">Website</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={form.website}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, website: e.target.value }))
+              }
             />
           </div>
 

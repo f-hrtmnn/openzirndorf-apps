@@ -19,7 +19,34 @@ export async function fetchGeoJSON(): Promise<GeoJSON.FeatureCollection> {
   return res.json();
 }
 
-export async function createStand(data: StandFormData): Promise<Stand> {
+export interface AdminStand extends Stand {
+  email: string | null;
+  status: string;
+  edit_token: string;
+}
+
+export async function fetchAdminStands(token: string): Promise<AdminStand[]> {
+  const res = await fetch(`${API}/stands/admin`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Ungültiger Token oder Serverfehler");
+  return res.json();
+}
+
+export async function approveStand(id: number, token: string): Promise<void> {
+  const res = await fetch(`${API}/stands/${id}/approve`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Freigabe fehlgeschlagen");
+}
+
+export interface CreatedStand extends Stand {
+  edit_token: string;
+  status: string;
+}
+
+export async function createStand(data: StandFormData): Promise<CreatedStand> {
   const res = await fetch(`${API}/stands`, {
     method: "POST",
     headers: {
@@ -33,4 +60,17 @@ export async function createStand(data: StandFormData): Promise<Stand> {
     throw new Error(err.detail ?? "Fehler beim Anmelden");
   }
   return res.json();
+}
+
+export async function fetchMyStand(editToken: string): Promise<CreatedStand> {
+  const res = await fetch(`${API}/stands/by-token/${editToken}`);
+  if (!res.ok) throw new Error("Stand nicht gefunden");
+  return res.json();
+}
+
+export async function cancelStand(editToken: string): Promise<void> {
+  const res = await fetch(`${API}/stands/by-token/${editToken}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Stand konnte nicht zurückgezogen werden");
 }
