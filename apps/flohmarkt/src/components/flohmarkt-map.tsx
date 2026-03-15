@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
+import { useEffect, useRef } from "react";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { fetchGeoJSON } from "../api";
 

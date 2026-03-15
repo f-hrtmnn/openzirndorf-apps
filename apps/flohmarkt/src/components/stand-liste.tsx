@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@openzirndorf/ui";
+import { Card, CardContent, CardHeader, CardTitle } from "@openzirndorf/ui";
 import type { Stand } from "../types";
 
 interface Props {
@@ -22,7 +17,9 @@ export function StandListe({ stands, loading }: Props) {
 
   if (!stands.length) {
     return (
-      <p className="text-muted-foreground text-sm">Noch keine Stände angemeldet.</p>
+      <p className="text-muted-foreground text-sm">
+        Noch keine Stände angemeldet.
+      </p>
     );
   }
 
@@ -35,9 +32,7 @@ export function StandListe({ stands, loading }: Props) {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">{s.adresse}</p>
-            {s.beschreibung && (
-              <p className="text-sm mt-1">{s.beschreibung}</p>
-            )}
+            {s.beschreibung && <p className="text-sm mt-1">{s.beschreibung}</p>}
           </CardContent>
         </Card>
       ))}

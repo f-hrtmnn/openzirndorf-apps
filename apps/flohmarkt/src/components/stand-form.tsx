@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Button } from "@openzirndorf/ui";
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@openzirndorf/ui";
+import { useState } from "react";
 import { createStand } from "../api";
 import type { StandFormData } from "../types";
 
@@ -13,11 +13,18 @@ interface Props {
   onSuccess: () => void;
 }
 
-const EMPTY: StandFormData = { name: "", adresse: "", beschreibung: "", email: "" };
+const EMPTY: StandFormData = {
+  name: "",
+  adresse: "",
+  beschreibung: "",
+  email: "",
+};
 
 export function StandForm({ onSuccess }: Props) {
   const [form, setForm] = useState<StandFormData>(EMPTY);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = async () => {
@@ -85,7 +92,9 @@ export function StandForm({ onSuccess }: Props) {
               className="border border-input rounded-md px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
               placeholder="z.B. Musterstraße 1, Zirndorf"
               value={form.adresse}
-              onChange={(e) => setForm((f) => ({ ...f, adresse: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, adresse: e.target.value }))
+              }
               disabled={status === "loading"}
             />
           </div>
@@ -98,7 +107,9 @@ export function StandForm({ onSuccess }: Props) {
               id="beschreibung"
               className="border border-input rounded-md px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 min-h-[80px] resize-y"
               value={form.beschreibung}
-              onChange={(e) => setForm((f) => ({ ...f, beschreibung: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, beschreibung: e.target.value }))
+              }
               disabled={status === "loading"}
             />
           </div>
@@ -112,7 +123,9 @@ export function StandForm({ onSuccess }: Props) {
               type="email"
               className="border border-input rounded-md px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
               value={form.email}
-              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, email: e.target.value }))
+              }
               disabled={status === "loading"}
             />
           </div>
