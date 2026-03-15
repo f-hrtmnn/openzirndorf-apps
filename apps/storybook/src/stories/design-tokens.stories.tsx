@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 const colorTokens = [
   { name: "Brand Green", variable: "--oz-brand-green" },
@@ -101,7 +101,9 @@ function useResolvedCssVariables(
   variables: readonly string[],
 ): [RefObject<HTMLDivElement | null>, Record<string, string>] {
   const rootRef = useRef<HTMLDivElement>(null);
-  const [resolvedValues, setResolvedValues] = useState<Record<string, string>>({});
+  const [resolvedValues, setResolvedValues] = useState<Record<string, string>>(
+    {},
+  );
 
   useEffect(() => {
     const root = rootRef.current;
@@ -112,7 +114,10 @@ function useResolvedCssVariables(
 
     const updateValues = () => {
       const nextValues = Object.fromEntries(
-        variables.map((variable) => [variable, readCssVariable(root, variable)]),
+        variables.map((variable) => [
+          variable,
+          readCssVariable(root, variable),
+        ]),
       );
 
       setResolvedValues(nextValues);
