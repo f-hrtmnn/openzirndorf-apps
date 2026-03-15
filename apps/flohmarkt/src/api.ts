@@ -2,6 +2,11 @@ import type { Stand, StandFormData } from "./types";
 
 const API = import.meta.env.VITE_API_URL ?? "http://localhost:8080";
 
+// Basic-Auth Header für POST /stands – Credentials kommen aus Vite-Env
+const apiAuth = btoa(
+  `${import.meta.env.VITE_API_USERNAME ?? ""}:${import.meta.env.VITE_API_PASSWORD ?? ""}`,
+);
+
 export async function fetchStands(): Promise<Stand[]> {
   const res = await fetch(`${API}/stands`);
   if (!res.ok) throw new Error("Stände konnten nicht geladen werden");
@@ -17,7 +22,10 @@ export async function fetchGeoJSON(): Promise<GeoJSON.FeatureCollection> {
 export async function createStand(data: StandFormData): Promise<Stand> {
   const res = await fetch(`${API}/stands`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${apiAuth}`,
+    },
     body: JSON.stringify(data),
   });
   if (!res.ok) {

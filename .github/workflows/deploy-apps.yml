@@ -91,6 +91,8 @@ jobs:
       - name: Build app
         env:
           BASE_PATH: /${{ github.event.repository.name }}/${{ matrix.app.directory }}/
+          VITE_API_USERNAME: ${{ secrets.VITE_API_USERNAME }}
+          VITE_API_PASSWORD: ${{ secrets.VITE_API_PASSWORD }}
         run: pnpm --filter "${{ matrix.app.packageName }}" build
 
       - name: Prepare app artifact
