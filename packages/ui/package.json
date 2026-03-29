@@ -1,6 +1,6 @@
 {
   "name": "@openzirndorf/ui",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "repository": "https://github.com/openzirndorf/openzirndorf-apps.git",
   "sideEffects": [
